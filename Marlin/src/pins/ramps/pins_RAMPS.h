@@ -307,6 +307,9 @@
    *
    * Hardware serial communication ports.
    * If undefined software serial is used according to the pins below
+   *
+   * Serial2 -- AUX-4 Pin 18 (D16 TX2) and AUX-4 Pin 17 (D17 RX2)
+   * Serial1 -- Pins D18 and D19 are used for Z-MIN and Z-MAX
    */
   //#define X_HARDWARE_SERIAL Serial1
   //#define X2_HARDWARE_SERIAL Serial1
@@ -468,6 +471,7 @@
 
     #elif ENABLED(ZONESTAR_LCD)
 
+      #error "CAUTION! ZONESTAR_LCD on RAMPS requires wiring modifications. It plugs into AUX2 but GND and 5V need to be swapped. Comment out this line to continue."
       #define LCD_PINS_RS                     64
       #define LCD_PINS_ENABLE                 44
       #define LCD_PINS_D4                     63
@@ -504,10 +508,10 @@
     #if !IS_NEWPANEL
       // Buttons attached to a shift register
       // Not wired yet
-      //#define SHIFT_CLK                     38
-      //#define SHIFT_LD                      42
-      //#define SHIFT_OUT                     40
-      //#define SHIFT_EN                      17
+      //#define SHIFT_CLK_PIN                 38
+      //#define SHIFT_LD_PIN                  42
+      //#define SHIFT_OUT_PIN                 40
+      //#define SHIFT_EN_PIN                  17
     #endif
 
   #endif
@@ -689,7 +693,9 @@
     #elif ENABLED(AZSMZ_12864)
 
       // Pins only defined for RAMPS_SMART currently
-      #error "No pins defined for RAMPS with AZSMZ_12864."
+      #if DISABLED(IS_RAMPS_SMART)
+        #error "No pins defined for RAMPS with AZSMZ_12864."
+      #endif
 
     #elif IS_TFTGLCD_PANEL
 
@@ -722,9 +728,9 @@
 #endif // HAS_WIRED_LCD
 
 #if IS_RRW_KEYPAD && !HAS_ADC_BUTTONS
-  #define SHIFT_OUT                           40
-  #define SHIFT_CLK                           44
-  #define SHIFT_LD                            42
+  #define SHIFT_OUT_PIN                       40
+  #define SHIFT_CLK_PIN                       44
+  #define SHIFT_LD_PIN                        42
   #ifndef BTN_EN1
     #define BTN_EN1                           64
   #endif
